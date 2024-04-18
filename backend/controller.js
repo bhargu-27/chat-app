@@ -3,11 +3,13 @@ const messageModel = require('./models/messageModel')
 const createThread=async(req,res)=>{
     try{
         let users=[
-            "Patient",
-            "Doctor"
+            "patient",
+            "doctor"
         ]
+        let {subject}=req.body;
         let thread= new threadModel({
-            users
+            users,
+            subject
         })
         await thread.save();
         return res.status(200).send({
@@ -31,6 +33,7 @@ const getAllThreads = async (req, res) => {
             let messages = await messageModel.find({ threadId: thread._id });
             let threadMsgObj = {
                 threadId: thread._id,
+                subject:thread.subject,
                 messages
             };
             threadMessages.push(threadMsgObj);

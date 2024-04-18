@@ -10,6 +10,7 @@ const Chat = () => {
         'Content-Type': 'application/json'
     };
     const [threads, setThreads] = useState([]);
+    const [newThreadSubject, setNewThreadSubject] = useState('');
 
     useEffect(() => {
         const getThreads = async () => {
@@ -19,7 +20,7 @@ const Chat = () => {
                     setThreads(res.data.threadMessages);
                 }
             } catch (err) {
-                console.err(err);
+                console.error(err);
             }
         };
         getThreads();
@@ -27,38 +28,42 @@ const Chat = () => {
 
     const [selectedThreadId, setSelectedThreadId] = useState(null);
     const [newMessage, setNewMessage] = useState('');
-    
+
     const handleSelectThread = (threadId) => {
         setSelectedThreadId(threadId === selectedThreadId ? null : threadId);
     };
 
-    const handleCreateNewThread =async() => {
-        let res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/createThread`, headers);
-        if(!res.data.isSuccess){
-            console.err(res.data.message)
+    const handleCreateNewThread = async () => {
+        let res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/createThread`, { subject: newThreadSubject }, headers);
+        if (!res.data.isSuccess) {
+            console.error(res.data.message);
+            return;
         }
         const newThreadId = res.data.thread._id;
         setThreads([
             ...threads,
             {
                 threadId: newThreadId,
+                subject: newThreadSubject,
                 messages: [],
             },
         ]);
         setSelectedThreadId(newThreadId);
+        setNewThreadSubject('');
     };
 
-    const handleMessageSend = async(e) => {
+    const handleMessageSend = async (e) => {
         e.preventDefault();
         if (newMessage.trim() === '') return;
         let values = {
-            threadId:selectedThreadId,
-            message:newMessage,
-            user:role
+            threadId: selectedThreadId,
+            message: newMessage,
+            user: role
         }
-        let res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/sendMessage`,values, headers);
-        if(!res.data.isSuccess){
-            console.err(res.data.message)
+        let res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/sendMessage`, values, headers);
+        if (!res.data.isSuccess) {
+            console.error(res.data.message);
+            return;
         }
         const updatedMessages = threads.map((thread) => {
             if (thread.threadId === selectedThreadId) {
@@ -89,7 +94,7 @@ const Chat = () => {
                             className={`p-4 rounded ${selectedThreadId === thread.threadId
                                 ? 'bg-gray-200'
                                 : 'bg-white hover:bg-gray-100 cursor-pointer'
-                            }`}
+                                }`}
                             onClick={(e) => {
                                 const targetTagName = e.target.tagName.toLowerCase();
                                 if (targetTagName !== 'input' && targetTagName !== 'button') {
@@ -97,7 +102,7 @@ const Chat = () => {
                                 }
                             }}
                         >
-                            <h2 className="text-xl font-bold">Thread</h2>
+                            <h2 className="text-xl font-bold">{thread.subject}</h2>
                             {selectedThreadId === thread.threadId && (
                                 <div>
                                     <ul>
@@ -108,7 +113,7 @@ const Chat = () => {
                                                     key={index}
                                                     className={`p-2 mb-2 rounded ${
                                                         msg.user === role ? 'ml-auto bg-green-200 text-green-800' : 'bg-blue-200 text-blue-800'
-                                                    }`}
+                                                        }`}
                                                     style={{
                                                         maxWidth: '70%',
                                                         textAlign: msg.user === role ? 'right' : 'left',
@@ -145,12 +150,21 @@ const Chat = () => {
                     </div>
                 ))}
 
-                <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                    onClick={handleCreateNewThread}
-                >
-                    + Create New Thread
-                </button>
+                <div className="flex mt-4">
+                    <input
+                        type="text"
+                        value={newThreadSubject}
+                        onChange={(e) => setNewThreadSubject(e.target.value)}
+                        placeholder="Enter subject of the new thread..."
+                        className="flex-grow border border-gray-300 rounded py-2 px-4"
+                    />
+                    <button
+                        onClick={handleCreateNewThread}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+                    >
+                        Create Thread
+                    </button>
+                </div>
             </div>
         </div>
     );
