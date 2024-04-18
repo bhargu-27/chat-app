@@ -10,6 +10,91 @@ const Chat = () => {
         'Content-Type': 'application/json'
     };
     const [threads, setThreads] = useState([]);
+    /*
+    Sample Thread Objects :
+    const thread=[
+        {
+            "threadId": "66217d8a565a46d362639c45",
+            "subject": "Consumption",
+            "messages": [
+                {
+                    "_id": "66217dad565a46d362639c47",
+                    "message": "Hello doctor what are the consumption restrictions as I am taking new medicines now",
+                    "time": "2024-04-18T20:08:13.053Z",
+                    "threadId": "66217d8a565a46d362639c45",
+                    "user": "patient",
+                    "__v": 0
+                }
+            ]
+        },
+        {
+            "threadId": "66217a01e62e3056b5256a09",
+            "subject": "Appointment",
+            "messages": [
+                {
+                    "_id": "66217a0ae62e3056b5256a0b",
+                    "message": "Hello doctor",
+                    "time": "2024-04-18T19:52:42.679Z",
+                    "threadId": "66217a01e62e3056b5256a09",
+                    "user": "patient",
+                    "__v": 0
+                },
+                {
+                    "_id": "66217d6a565a46d362639c3f",
+                    "message": "I wanted reschedule my appointment",
+                    "time": "2024-04-18T20:07:06.319Z",
+                    "threadId": "66217a01e62e3056b5256a09",
+                    "user": "patient",
+                    "__v": 0
+                }
+            ]
+        },
+        {
+            "threadId": "662175052b57c540035f8fc0",
+            "subject": "extra medicines",
+            "messages": [
+                {
+                    "_id": "6621750d2b57c540035f8fc2",
+                    "message": "Hi",
+                    "time": "2024-04-18T19:31:25.185Z",
+                    "threadId": "662175052b57c540035f8fc0",
+                    "user": "patient",
+                    "__v": 0
+                }
+            ]
+        },
+        {
+            "threadId": "66216e66cb973321b303622f",
+            "subject": "exercise",
+            "messages": [
+                {
+                    "_id": "66216f3bcb973321b3036231",
+                    "message": "Hello",
+                    "time": "2024-04-18T19:06:35.628Z",
+                    "threadId": "66216e66cb973321b303622f",
+                    "user": "patient",
+                    "__v": 0
+                },
+                {
+                    "_id": "6621767c2b57c540035f8fd9",
+                    "message": "Hey",
+                    "time": "2024-04-18T19:37:32.044Z",
+                    "threadId": "66216e66cb973321b303622f",
+                    "user": "doctor",
+                    "__v": 0
+                },
+                {
+                    "_id": "662179eae62e3056b5256a04",
+                    "message": "Hey",
+                    "time": "2024-04-18T19:52:10.457Z",
+                    "threadId": "66216e66cb973321b303622f",
+                    "user": "patient",
+                    "__v": 0
+                }
+            ]
+        }
+    ]
+    */
     const [newThreadSubject, setNewThreadSubject] = useState('');
 
     useEffect(() => {
